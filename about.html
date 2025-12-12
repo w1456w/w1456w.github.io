@@ -2,14 +2,15 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>俄罗斯方块游戏</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>俄罗斯方块游戏 - 支持手机和电脑</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
+            touch-action: manipulation;
         }
         
         body {
@@ -20,36 +21,38 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
+            overflow-x: hidden;
         }
         
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 30px;
-            max-width: 900px;
+            gap: 25px;
+            max-width: 1000px;
             margin: 0 auto;
+            width: 100%;
         }
         
         header {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             width: 100%;
         }
         
         h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             color: #4cc9f0;
             text-shadow: 0 0 10px rgba(76, 201, 240, 0.7);
-            margin-bottom: 10px;
-            letter-spacing: 2px;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
         }
         
         .subtitle {
             color: #a9a9a9;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+            font-size: 1rem;
+            margin-bottom: 15px;
         }
         
         .game-area {
@@ -63,6 +66,8 @@
             border-radius: 5px;
             background-color: #0f3460;
             box-shadow: 0 0 20px rgba(76, 201, 240, 0.3);
+            max-width: 100%;
+            height: auto;
         }
         
         .side-panel {
@@ -75,14 +80,14 @@
         .panel {
             background-color: rgba(15, 52, 96, 0.7);
             border-radius: 10px;
-            padding: 20px;
+            padding: 18px;
             border: 2px solid #4361ee;
         }
         
         .panel h2 {
             color: #4cc9f0;
             margin-bottom: 15px;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             border-bottom: 2px solid #4361ee;
             padding-bottom: 5px;
         }
@@ -91,7 +96,7 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
         
         .info-label {
@@ -101,7 +106,7 @@
         .info-value {
             color: #f72585;
             font-weight: bold;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
         
         .next-piece-container {
@@ -143,20 +148,16 @@
             min-width: 120px;
         }
         
-        button:hover {
+        button:hover, button:active {
             background-color: #4cc9f0;
             transform: translateY(-2px);
-        }
-        
-        button:active {
-            transform: translateY(1px);
         }
         
         #pause-btn {
             background-color: #f72585;
         }
         
-        #pause-btn:hover {
+        #pause-btn:hover, #pause-btn:active {
             background-color: #ff4da6;
         }
         
@@ -164,8 +165,98 @@
             background-color: #7209b7;
         }
         
-        #reset-btn:hover {
+        #reset-btn:hover, #reset-btn:active {
             background-color: #9d4edd;
+        }
+        
+        /* 触摸控制区域 */
+        .touch-controls {
+            display: none;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 25px;
+            padding: 15px;
+            background-color: rgba(15, 52, 96, 0.7);
+            border-radius: 15px;
+            border: 2px solid #4361ee;
+        }
+        
+        .touch-controls.show {
+            display: block;
+        }
+        
+        .touch-controls h3 {
+            text-align: center;
+            color: #4cc9f0;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .touch-controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 15px;
+            justify-items: center;
+            align-items: center;
+        }
+        
+        .touch-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #4361ee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            color: white;
+            user-select: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            border: none;
+        }
+        
+        .touch-btn:active {
+            transform: scale(0.95);
+            background-color: #4cc9f0;
+        }
+        
+        .touch-btn-rotate {
+            background-color: #f72585;
+        }
+        
+        .touch-btn-hard-drop {
+            background-color: #7209b7;
+            font-size: 1.5rem;
+        }
+        
+        .touch-btn-left {
+            grid-column: 1;
+            grid-row: 2;
+        }
+        
+        .touch-btn-down {
+            grid-column: 2;
+            grid-row: 2;
+        }
+        
+        .touch-btn-right {
+            grid-column: 3;
+            grid-row: 2;
+        }
+        
+        .touch-btn-rotate {
+            grid-column: 1;
+            grid-row: 1;
+            justify-self: end;
+        }
+        
+        .touch-btn-hard-drop {
+            grid-column: 3;
+            grid-row: 1;
+            justify-self: start;
         }
         
         .instructions {
@@ -189,42 +280,47 @@
         .instructions p {
             margin-bottom: 8px;
             color: #ccc;
+            font-size: 0.95rem;
         }
         
         footer {
-            margin-top: 30px;
+            margin-top: 25px;
             text-align: center;
             color: #a9a9a9;
             font-size: 0.9rem;
             width: 100%;
+            padding: 0 10px;
         }
         
         .game-over {
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.9);
+            background-color: rgba(0, 0, 0, 0.95);
             padding: 30px;
             border-radius: 10px;
             text-align: center;
             display: none;
-            z-index: 10;
+            z-index: 100;
             border: 3px solid #f72585;
             box-shadow: 0 0 30px rgba(247, 37, 133, 0.5);
+            width: 90%;
+            max-width: 400px;
         }
         
         .game-over h2 {
             color: #f72585;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 20px;
         }
         
         .game-over p {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             margin-bottom: 25px;
         }
         
+        /* 响应式设计 */
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -245,18 +341,137 @@
                 width: 100px;
                 height: 100px;
             }
+            
+            .touch-controls {
+                display: block;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .panel {
+                padding: 15px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            #game-canvas {
+                width: 280px;
+                height: 560px;
+            }
+            
+            .touch-btn {
+                width: 70px;
+                height: 70px;
+                font-size: 1.7rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .panel h2 {
+                font-size: 1.3rem;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .instructions .mobile-only {
+                display: none;
+            }
+        }
+        
+        /* 防止长按选中文本 */
+        .no-select {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        /* 游戏控制说明 */
+        .control-guide {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+        
+        .control-section {
+            background-color: rgba(15, 52, 96, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            flex: 1;
+            min-width: 250px;
+        }
+        
+        .control-section h3 {
+            color: #4cc9f0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #4361ee;
+            padding-bottom: 5px;
+        }
+        
+        .control-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .control-icon {
+            background-color: #333;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .control-description {
+            color: #ccc;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
     <header>
         <h1>俄罗斯方块</h1>
-        <div class="subtitle">经典益智游戏 - 使用纯HTML/CSS/JavaScript实现</div>
+        <div class="subtitle">经典益智游戏 - 支持电脑和手机操作</div>
     </header>
     
     <div class="container">
         <div class="game-area">
             <canvas id="game-canvas" width="300" height="600"></canvas>
+            
+            <!-- 触摸控制区域（在移动设备上显示） -->
+            <div class="touch-controls" id="touch-controls">
+                <h3>触摸控制</h3>
+                <div class="touch-controls-grid">
+                    <button class="touch-btn touch-btn-rotate" id="touch-rotate">↻</button>
+                    <button class="touch-btn touch-btn-hard-drop" id="touch-hard-drop">↓</button>
+                    <button class="touch-btn touch-btn-left" id="touch-left">←</button>
+                    <button class="touch-btn" id="touch-down">↓</button>
+                    <button class="touch-btn touch-btn-right" id="touch-right">→</button>
+                </div>
+            </div>
         </div>
         
         <div class="side-panel">
@@ -301,7 +516,55 @@
                     <p><span class="key">↓</span> 加速下落</p>
                     <p><span class="key">↑</span> 旋转方块</p>
                     <p><span class="key">空格</span> 直接落到底部</p>
+                    <p class="mobile-only">在手机上使用下方触摸按钮控制</p>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 游戏控制说明 -->
+    <div class="control-guide">
+        <div class="control-section">
+            <h3>电脑控制</h3>
+            <div class="control-item">
+                <div class="control-icon">← →</div>
+                <div class="control-description">左右移动方块</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">↓</div>
+                <div class="control-description">加速下落</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">↑</div>
+                <div class="control-description">旋转方块</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">空格</div>
+                <div class="control-description">直接落到底部</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">P</div>
+                <div class="control-description">暂停/继续游戏</div>
+            </div>
+        </div>
+        
+        <div class="control-section">
+            <h3>手机控制</h3>
+            <div class="control-item">
+                <div class="control-icon">← → ↓</div>
+                <div class="control-description">方向按钮移动方块</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">↻</div>
+                <div class="control-description">旋转方块</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">↓</div>
+                <div class="control-description">直接落到底部</div>
+            </div>
+            <div class="control-item">
+                <div class="control-icon">开始/暂停</div>
+                <div class="control-description">使用上方按钮控制</div>
             </div>
         </div>
     </div>
@@ -310,11 +573,12 @@
         <h2>游戏结束!</h2>
         <p>最终分数: <span id="final-score">0</span></p>
         <p>消行总数: <span id="final-lines">0</span></p>
+        <p>最高等级: <span id="final-level">0</span></p>
         <button id="restart-btn">重新开始</button>
     </div>
     
     <footer>
-        <p>纯HTML实现的俄罗斯方块游戏 | 使用Canvas绘制 | 2023</p>
+        <p>纯HTML实现的俄罗斯方块游戏 | 支持电脑和手机操作 | 2023</p>
     </footer>
 
     <script>
@@ -385,6 +649,8 @@
         let gameOver = false;
         let isPaused = false;
         let lastTime = 0;
+        let isTouchDevice = false;
+        let highScore = localStorage.getItem('tetrisHighScore') || 0;
         
         // DOM元素
         const scoreElement = document.getElementById('score');
@@ -398,9 +664,32 @@
         const gameOverElement = document.getElementById('game-over');
         const finalScoreElement = document.getElementById('final-score');
         const finalLinesElement = document.getElementById('final-lines');
+        const finalLevelElement = document.getElementById('final-level');
+        
+        // 触摸控制元素
+        const touchControls = document.getElementById('touch-controls');
+        const touchLeft = document.getElementById('touch-left');
+        const touchRight = document.getElementById('touch-right');
+        const touchDown = document.getElementById('touch-down');
+        const touchRotate = document.getElementById('touch-rotate');
+        const touchHardDrop = document.getElementById('touch-hard-drop');
+        
+        // 检测是否为触摸设备
+        function detectTouchDevice() {
+            return (('ontouchstart' in window) ||
+               (navigator.maxTouchPoints > 0) ||
+               (navigator.msMaxTouchPoints > 0));
+        }
         
         // 初始化游戏
         function init() {
+            isTouchDevice = detectTouchDevice();
+            
+            // 如果是触摸设备，显示触摸控制
+            if (isTouchDevice) {
+                touchControls.classList.add('show');
+            }
+            
             canvas = document.getElementById('game-canvas');
             ctx = canvas.getContext('2d');
             nextCanvas = document.getElementById('next-canvas');
@@ -430,8 +719,73 @@
             resetButton.addEventListener('click', resetGame);
             restartButton.addEventListener('click', resetGame);
             
+            // 添加触摸事件监听器
+            setupTouchControls();
+            
             // 初始游戏状态
             updateStatus('准备开始');
+        }
+        
+        // 设置触摸控制
+        function setupTouchControls() {
+            // 左移动
+            touchLeft.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                movePiece(-1, 0);
+            });
+            touchLeft.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                movePiece(-1, 0);
+            });
+            
+            // 右移动
+            touchRight.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                movePiece(1, 0);
+            });
+            touchRight.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                movePiece(1, 0);
+            });
+            
+            // 向下加速
+            touchDown.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                movePiece(0, 1);
+            });
+            touchDown.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                movePiece(0, 1);
+            });
+            
+            // 旋转
+            touchRotate.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                rotatePiece();
+            });
+            touchRotate.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                rotatePiece();
+            });
+            
+            // 硬降
+            touchHardDrop.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                hardDrop();
+            });
+            touchHardDrop.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                hardDrop();
+            });
+            
+            // 防止按钮的默认行为
+            const touchButtons = document.querySelectorAll('.touch-btn');
+            touchButtons.forEach(button => {
+                button.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    return false;
+                });
+            });
         }
         
         // 创建游戏板
@@ -838,9 +1192,16 @@
             gameOver = true;
             updateStatus('游戏结束');
             
+            // 更新最高分
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('tetrisHighScore', highScore);
+            }
+            
             // 显示游戏结束界面
             finalScoreElement.textContent = score;
             finalLinesElement.textContent = lines;
+            finalLevelElement.textContent = level;
             gameOverElement.style.display = 'block';
         }
         
